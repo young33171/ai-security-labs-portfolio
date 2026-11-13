@@ -1,44 +1,114 @@
 # AI & Cybersecurity Lab Portfolio
 
-서울여자대학교 정보보호학과 전공 수업과 보안 교육에서 수행한 실습을 주제별로 정리한 저장소입니다.
+서울여자대학교 정보보호학과 전공 수업과 보안 교육에서 수행한 실습을 AI·머신러닝, 시스템 보안, 리버스 엔지니어링, 네트워크 보안 영역으로 나누어 정리한 학습 포트폴리오입니다. 단순히 코드를 모아 두는 데 그치지 않고 **문제 정의 → 데이터·환경 확인 → 구현 → 결과 검증 → 보안 관점 해석**의 흐름이 드러나도록 구성했습니다.
 
-> 모든 실습은 교육·방어 목적의 격리된 환경에서 수행했습니다. 개인정보, 인증정보, 실제 공격 대상 정보 및 수업 원문 자료는 포함하지 않습니다.
+> 모든 보안 실습은 교육·방어 목적의 로컬 PC 또는 격리된 가상환경에서 수행했습니다. 개인정보, 인증정보, 실제 공격 대상 정보, 수업 원문 자료 및 공개가 제한된 데이터는 포함하지 않습니다.
 
-## 실습 구성
+## 1. 저장소 한눈에 보기
 
-| 영역 | 핵심 실습 | 사용 기술 |
+| 영역 | 주요 실습 | 핵심 기술 | 확인할 수 있는 역량 |
+|---|---|---|---|
+| [AI·머신러닝](./01-ai-ml/) | PyTorch 텐서, 악성코드 KNN 분류, 피싱 탐지, 과일 이미지 K-Means·PCA | Python, PyTorch, NumPy, pandas, scikit-learn, Matplotlib | 데이터 전처리, 지도·비지도 학습, 모델 평가, 결과 시각화 |
+| [시스템 보안](./02-system-security/) | SetUID, Linux x86 쉘코드, 버퍼 오버플로와 GDB 분석 | Linux, C, NASM, GCC, GDB | 권한 구조, 메모리 구조, 취약점 발생 원리, 완화 기법 |
+| [리버스 엔지니어링](./03-reverse-engineering/) | PE 구조 분석, DLL 로딩 검증, 바이너리 패치 | Windows, Visual Studio, PEView, HxD, Process Explorer | PE 포맷 이해, 정적·동적 분석, 무결성 변화 확인 |
+| [네트워크 보안](./04-network-security/) | PCAP 캡처, Ethernet·IP·TCP/UDP 헤더 분석 | C/C++, libpcap, Wireshark, BPF | 패킷 구조 해석, 바이트 순서 처리, 캡처 결과 교차 검증 |
+
+## 2. 대표 실습
+
+### 2.1 악성코드·피싱 사이트 분류
+
+- 악성/정상 또는 피싱/정상 레이블과 수치 특성을 확인했습니다.
+- 학습 데이터와 테스트 데이터를 분리하여 학습에 사용하지 않은 데이터로 성능을 평가했습니다.
+- 거리 기반 모델인 KNN에는 특성 크기 차이를 줄이기 위한 표준화를 적용했습니다.
+- KNN, 로지스틱 회귀, 결정트리의 예측 방식과 장단점을 비교했습니다.
+- 정확도뿐 아니라 혼동행렬, 정밀도, 재현율, F1-score를 함께 확인해 보안 탐지에서의 오탐과 미탐을 구분했습니다.
+
+### 2.2 과일 이미지 K-Means·PCA 응용
+
+- 이미지 파일을 동일한 크기의 배열로 변환하고 `.npy` 형식으로 저장했습니다.
+- 레이블을 사용하지 않는 K-Means로 유사한 이미지가 같은 군집에 모이는지 확인했습니다.
+- PCA로 고차원 픽셀 정보를 축소하고 누적 설명 분산과 복원 이미지를 비교했습니다.
+- 축소된 특성을 로지스틱 회귀에 연결하여 차원 축소 전후의 분류 흐름을 확인했습니다.
+- 기존 예제 외에 키위, 망고, 오렌지, 딸기 4종을 선정한 응용 노트북을 별도로 작성했습니다.
+
+### 2.3 시스템·리버스 엔지니어링
+
+- 실제 UID와 유효 UID의 차이를 통해 SetUID 프로그램의 권한 동작을 확인했습니다.
+- 어셈블리 코드를 기계어 바이트로 변환하고 C 프로그램에서 실행되는 과정을 추적했습니다.
+- GDB로 스택과 레지스터 변화를 관찰하여 버퍼 경계를 넘는 입력이 실행 흐름에 미치는 영향을 분석했습니다.
+- Windows PE 헤더, 섹션, Import Table을 확인하고 DLL 로딩 및 바이너리 변경 여부를 도구로 교차 검증했습니다.
+- 각 실습마다 NX/DEP, ASLR, Stack Canary, 최소 권한, 코드 서명 등 대응 방안을 함께 정리했습니다.
+
+## 3. AI·머신러닝 노트북 구성
+
+| 노트북 | 주요 내용 | 결과 확인 항목 |
 |---|---|---|
-| [AI·머신러닝](./01-ai-ml/) | PyTorch 텐서, KNN 악성코드 분류, 피싱 탐지, K-Means, PCA | Python, PyTorch, scikit-learn, pandas |
-| [시스템 보안](./02-system-security/) | SetUID, 쉘코드, 버퍼 오버플로 분석 | Linux, C, NASM, GDB |
-| [리버스 엔지니어링](./03-reverse-engineering/) | PE 구조, DLL 인젝션, 바이너리 패치 | Windows, Visual Studio, PEView, HxD, Process Explorer |
-| [네트워크 보안](./04-network-security/) | PCAP 패킷 캡처·분석 | C/C++, libpcap, Wireshark |
+| `pytorch_tensor_basics.ipynb` | 텐서 생성, 인덱싱, 구조 변경, 연산 | shape·dtype 변화, 행렬 연산 결과 |
+| `01_Malware_KNN.ipynb` | KNN 기반 악성코드 분류 | 이웃 수, 테스트 정확도, 혼동행렬 |
+| `02_Phishing_Logistic_Regression.ipynb` | 로지스틱 회귀 기반 피싱 분류 | 예측 확률, 정밀도·재현율·F1 |
+| `03_Phishing_DecisionTree_3Models_Comparison.ipynb` | 결정트리 학습과 세 모델 비교 | 모델별 성능, 과대적합 여부, 해석 가능성 |
+| `Lab_06_01_fruit_clustering.ipynb` | 과일 이미지 배열과 평균 이미지 | 클래스별 픽셀 평균, 유사 이미지 탐색 |
+| `Lab_06_02.ipynb` | K-Means 군집화 | 군집별 개수, 중심 이미지, 반복 수렴 |
+| `Lab_06_03.ipynb` | PCA 차원 축소 | 설명 분산, 주성분, 이미지 복원 |
+| `Lab_06_04_Fruits4_Application.ipynb` | 새로운 과일 4종 응용 | `.npy` 생성, K-Means·PCA·분류 결과 |
 
-## 주요 결과
+### 실제 과제 제출본
 
-- 이미지 군집화에서 K-Means와 PCA를 적용하고 군집 중심·설명 분산을 시각화했습니다.
-- KNN, 로지스틱 회귀, 결정트리를 이용해 악성코드·피싱 사이트 분류 과정을 비교했습니다.
-- PyTorch 텐서 생성·인덱싱·구조 변경·연산을 실행 결과와 함께 정리했습니다.
-- Linux/Windows 보안 실습은 명령어 암기보다 동작 원리, 검증 방법, 방어 관점을 중심으로 기록했습니다.
+과제로 제출한 노트북은 [`01-ai-ml/05-week9-submissions`](./01-ai-ml/05-week9-submissions/) 폴더에 별도로 모았습니다. 앙상블과 Iris 응용, 과일 군집 확인문제, 새로운 과일 4종 응용 노트북의 코드와 실행 결과를 확인할 수 있습니다.
 
-## 실행 환경
+## 4. 공통 실습 방법
+
+```mermaid
+flowchart LR
+    A[문제와 목표 정의] --> B[데이터·환경 점검]
+    B --> C[전처리와 구현]
+    C --> D[실행 결과 검증]
+    D --> E[오류·한계 분석]
+    E --> F[보안 관점 정리]
+```
+
+모델 성능이 높게 나왔다는 사실만 기록하지 않고, 데이터 누수 여부, 클래스 불균형, 과대적합, 오탐·미탐 비용, 재현 가능한 실행 조건을 함께 살펴보았습니다. 보안 실습 역시 명령 실행 자체보다 **왜 해당 현상이 발생하는지, 어떤 도구로 확인했는지, 실제 환경에서는 어떻게 방어해야 하는지**를 중심으로 정리했습니다.
+
+## 5. 실행 환경
+
+### 로컬 JupyterLab
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 jupyter lab
 ```
 
-노트북은 Google Colab에서도 열 수 있습니다. 데이터셋은 각 노트북의 다운로드 셀 또는 해당 폴더 README를 참고하세요.
+### Google Colab
 
-## 저장소 원칙
+1. 실행할 `.ipynb` 파일을 내려받습니다.
+2. Google Colab에서 `파일 → 노트 업로드`를 선택합니다.
+3. 위에서 아래 순서대로 셀을 실행합니다.
+4. 데이터 경로가 다른 경우 노트북의 데이터 준비 셀에서 경로를 수정합니다.
+5. 런타임 재시작 시 업로드 파일이 초기화될 수 있으므로 필요한 데이터는 다시 연결합니다.
+
+## 6. 평가 시 주의한 기준
+
+| 기준 | 확인 내용 |
+|---|---|
+| 재현성 | 필요한 패키지와 실행 순서가 명확한지 확인 |
+| 일반화 | 학습 점수와 테스트 점수의 차이 확인 |
+| 탐지 품질 | 정확도 외 정밀도·재현율·F1-score 확인 |
+| 데이터 품질 | 결측치, 레이블, 클래스 분포, 중복 여부 확인 |
+| 해석 가능성 | 계수, 이웃, 트리 규칙, 군집 중심을 모델 특성에 맞게 해석 |
+| 보안성 | 공개 데이터 범위, 개인정보, 공격 코드 악용 가능성 점검 |
+
+## 7. 저장소 운영 원칙
 
 1. 공개 가능한 코드와 직접 작성한 설명만 게시합니다.
-2. 수업 교재 PDF와 제3자 저작물은 저장하지 않습니다.
-3. 공격 기법은 로컬 가상환경과 교육용 파일에서만 검증합니다.
-4. 실습마다 목표 → 환경 → 절차 → 결과 → 배운 점 순서로 기록합니다.
+2. 수업 교재 PDF, 제3자 저작물, 원본 대용량 데이터는 저장하지 않습니다.
+3. 데이터 출처와 사용 조건을 확인하고 필요한 경우 실행 시 내려받도록 구성합니다.
+4. 공격 기법은 로컬 가상환경과 교육용 파일에서만 검증합니다.
+5. 계정, 토큰, 이메일, 내부 경로 등 개인정보와 인증정보를 제거합니다.
+6. 실습 설명은 목표 → 환경 → 절차 → 결과 → 한계 → 방어 관점 순서로 기록합니다.
 
-## 학습 키워드
+## 8. 학습 키워드
 
-`AI Security` · `Machine Learning` · `Malware Classification` · `Phishing Detection` · `PCA` · `K-Means` · `System Security` · `Reverse Engineering` · `Network Security`
-
+`AI Security` · `Machine Learning` · `Malware Classification` · `Phishing Detection` · `KNN` · `Logistic Regression` · `Decision Tree` · `PCA` · `K-Means` · `PyTorch` · `System Security` · `Reverse Engineering` · `PCAP` · `Network Security`
